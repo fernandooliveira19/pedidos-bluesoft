@@ -14,5 +14,7 @@ public class ProdutoDTO {
 	private String gtin;
 
 	private String nome;
+	
+	private Integer quantidade;
 
 }

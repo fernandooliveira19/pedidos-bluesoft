@@ -1,7 +1,5 @@
 package br.com.bluesoft.desafio.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,12 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FornecedorDTO {
+public class FornecedorProdutoDTO {
 	
-	private String nome;
+	private String nomeFornecedor;
 	private String cnpj;
-	
-	private List<PrecoDTO> precos;
+	private String nomeProduto;
+	private Double menorPreco;
+	private Integer quantidade;
+	private String gtin;
+	private ProdutoDTO produto;
 	
 	
 

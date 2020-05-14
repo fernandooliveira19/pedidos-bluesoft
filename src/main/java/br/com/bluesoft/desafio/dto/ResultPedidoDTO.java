@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FornecedorDTO {
+public class ResultPedidoDTO {
 	
-	private String nome;
+	private String nomeFornecedor;
 	private String cnpj;
-	
-	private List<PrecoDTO> precos;
+	private List<ResultProdutoDTO> listaProdutos;
+//	private List<PrecoDTO> precos;
 	
 	
 
