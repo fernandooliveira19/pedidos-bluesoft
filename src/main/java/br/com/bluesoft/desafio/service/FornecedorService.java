@@ -24,7 +24,7 @@ public class FornecedorService {
 	@Autowired
 	private FornecedorRepository fornecedorRepository;
 	
-	public List<FornecedorDTO> buscarListaFornecedoresPorProduto(String gtin){
+	public List<FornecedorDTO> buscarListaFornecedoresPorProduto(String gtin) throws Exception{
 		
 		String uri = builderUriApiFornecedor(gtin);
 		

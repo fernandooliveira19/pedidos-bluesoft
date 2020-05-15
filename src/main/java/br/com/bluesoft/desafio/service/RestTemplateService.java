@@ -18,20 +18,26 @@ import br.com.bluesoft.desafio.dto.FornecedorDTO;
 @Service
 public class RestTemplateService {
 
-	public List<FornecedorDTO> acessarApiRest(String uri) {
-		
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		headers.setAcceptCharset(Collections.singletonList(Charset.forName("UTF-8")));
-		
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		ResponseEntity<List<FornecedorDTO>> result = restTemplate.exchange(uri,HttpMethod.GET, entity,new ParameterizedTypeReference<List<FornecedorDTO>>() {
-		});
-		
-		return result.getBody();
-	}
-	
-}
+	public List<FornecedorDTO> acessarApiRest(String uri) throws Exception {
 
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.setAcceptCharset(Collections.singletonList(Charset.forName("UTF-8")));
+
+			HttpEntity<String> entity = new HttpEntity<String>(headers);
+			ResponseEntity<List<FornecedorDTO>> result = restTemplate.exchange(uri, HttpMethod.GET, entity,
+					new ParameterizedTypeReference<List<FornecedorDTO>>() {
+					});
+
+			return result.getBody();
+		} catch (Exception e) {
+
+			throw new Exception(
+					"Erro ao acessar lista de fornecedores. Tente novamente mais tarde");
+		}
+	}
+
+}
