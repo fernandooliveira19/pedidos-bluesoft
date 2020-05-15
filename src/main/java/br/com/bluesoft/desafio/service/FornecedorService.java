@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.com.bluesoft.desafio.dto.FornecedorDTO;
+import br.com.bluesoft.desafio.dto.ResultPedidoDTO;
 import br.com.bluesoft.desafio.model.Fornecedor;
 import br.com.bluesoft.desafio.repository.FornecedorRepository;
 
@@ -40,22 +41,36 @@ public class FornecedorService {
 	}
 
 	
-	public Fornecedor buscarFornecedorPorCNPJ(String cnpj) {
+	public Fornecedor buscarOuCriarFornecedor(Fornecedor fornecedor) {
 		
-		Optional<Fornecedor> result = fornecedorRepository.findByCnpj(cnpj);
+		Optional<Fornecedor> result = fornecedorRepository.findByCnpj(fornecedor.getCnpj());
 		
-		if(result.isPresent()) {
-			
+		if(!result.isPresent()) {
+			return criarFornecedor(fornecedor);
 		}
 		return result.get();
 	}
+	
+	public Fornecedor criarFornecedor(Fornecedor fornecedor) {
+		
+		return fornecedorRepository.save(fornecedor);
+	}
 
-	public Fornecedor buscarFornecedor(String cnpj) {
+	public Fornecedor buscarFornecedor(ResultPedidoDTO dto) {
 		
-		Fornecedor fornecedor = buscarFornecedorPorCNPJ(cnpj);
+		Fornecedor fornecedor = buildFornecedor(dto);
 		
-		Fornecedor fornecedorSalvo = fornecedorRepository.save(fornecedor);
+		return buscarOuCriarFornecedor(fornecedor);
 		
-		return fornecedorSalvo;
+		
+	}
+	
+	public Fornecedor buildFornecedor(ResultPedidoDTO dto) {
+		Fornecedor fornecedor = Fornecedor
+				.builder()
+				.cnpj(dto.getCnpj())
+				.nome(dto.getNomeFornecedor())
+				.build();
+		return fornecedor;
 	}
 }

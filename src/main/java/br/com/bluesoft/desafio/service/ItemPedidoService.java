@@ -1,5 +1,8 @@
 package br.com.bluesoft.desafio.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +22,19 @@ public class ItemPedidoService {
 	@Autowired
 	private ProdutoService produtoService;
 
-	public void salvarItensPedidos(Pedido pedido, ResultPedidoDTO dto) {
+	public List<ItemPedido> salvarItensPedidos(Pedido pedido, ResultPedidoDTO dto) {
 		
+		List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
 		for(ResultProdutoDTO item : dto.getListaProdutos()) {
 	
 			ItemPedido itemPedido = criarItemPedido(pedido, item);
 			
 			itemPedidoRepository.save(itemPedido);
+			itensPedido.add(itemPedido);
 			
 		}
 	
-		
+		return itensPedido;
 	}
 
 	public ItemPedido criarItemPedido(Pedido pedido, ResultProdutoDTO item) {

@@ -33,15 +33,22 @@ public class PedidoService {
 	private ItemPedidoService itemPedidoService;
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void salvarPedidos(List<ResultPedidoDTO> pedidosDTO) {
+	public List<Pedido> salvarPedidos(List<ResultPedidoDTO> pedidosDTO) {
 
+		List<Pedido> pedidosCriados = new ArrayList<Pedido>();
+		
 		for (ResultPedidoDTO dto : pedidosDTO) {
 
 			Pedido pedidoSalvo = salvarPedido(dto);
 
-			itemPedidoService.salvarItensPedidos(pedidoSalvo, dto);
+			List<ItemPedido> itens = itemPedidoService.salvarItensPedidos(pedidoSalvo, dto);
+			pedidoSalvo.setItens(itens);
+			
+			pedidosCriados.add(pedidoSalvo);
 
 		}
+		
+		return pedidosCriados;
 
 	}
 
@@ -56,7 +63,7 @@ public class PedidoService {
 
 	private Pedido converterParaObjeto(ResultPedidoDTO dto) {
 
-		Fornecedor fornecedor = fornecedorService.buscarFornecedor(dto.getCnpj());
+		Fornecedor fornecedor = fornecedorService.buscarFornecedor(dto);
 
 		Pedido pedido = Pedido.builder().fornecedor(fornecedor).build();
 

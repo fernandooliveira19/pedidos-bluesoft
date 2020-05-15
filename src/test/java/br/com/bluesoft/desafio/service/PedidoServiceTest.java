@@ -2,6 +2,7 @@ package br.com.bluesoft.desafio.service;
 
 import java.util.Arrays;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import br.com.bluesoft.desafio.dto.PedidoDTO;
 import br.com.bluesoft.desafio.dto.ProdutoDTO;
 import br.com.bluesoft.desafio.dto.ResultPedidoDTO;
 import br.com.bluesoft.desafio.dto.ResultProdutoDTO;
+import br.com.bluesoft.desafio.exception.FornecedorProdutoNotFoundException;
 import br.com.bluesoft.desafio.model.Fornecedor;
 import br.com.bluesoft.desafio.model.ItemPedido;
 import br.com.bluesoft.desafio.model.Pedido;
@@ -60,4 +62,6 @@ public class PedidoServiceTest {
 		Assert.assertEquals(new Integer(1), result.getItens().get(0).getQuantidade());
 		Assert.assertEquals("REFRIGERANTE COCA-COLA 2LT", result.getItens().get(0).getProduto().getNome());
 	}
+	
+	
 }

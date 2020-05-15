@@ -43,11 +43,9 @@ public class PedidoController {
     
       
     @PostMapping("/novo")
-    public Iterable<PedidoDTO> adicionarPedido(@RequestBody List<ProdutoDTO> produtos) {
+    public Iterable<PedidoDTO> adicionarPedido(@RequestBody List<ProdutoDTO> produtos) throws Exception {
     	
-    		List<PedidoDTO> listaPedidos = produtoService.criarListaPedidosPorProdutos(produtos);
-
-    		
-            return listaPedidos;
+    		    		
+            return produtoService.criarListaPedidosPorProdutos(produtos);
     }
 }
