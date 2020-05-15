@@ -17,7 +17,6 @@ import br.com.bluesoft.desafio.dto.FornecedorProdutoDTO;
 import br.com.bluesoft.desafio.dto.PrecoDTO;
 import br.com.bluesoft.desafio.dto.ProdutoDTO;
 import br.com.bluesoft.desafio.dto.ResultPedidoDTO;
-import br.com.bluesoft.desafio.exception.FornecedorProdutoNotFoundException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -137,8 +136,8 @@ public class ProdutoServiceTest {
 		Assert.assertEquals(new Integer(1), result.get(0).getListaProdutos().get(0).getQuantidade());
 		
 		Assert.assertEquals(new Double(3.1), result.get(0).getListaProdutos().get(1).getPreco());
-		Assert.assertEquals(new Integer(2), result.get(0).getListaProdutos().get(1).getQuantidade());
-		Assert.assertEquals(new Double(11.78), result.get(0).getListaProdutos().get(1).getTotal());
+		Assert.assertEquals(new Integer(1), result.get(0).getListaProdutos().get(1).getQuantidade());
+		
 		
 		
 	}
@@ -156,7 +155,7 @@ public class ProdutoServiceTest {
 		
 		Throwable exception  = Assertions.catchThrowable(() -> produtoService.criarListaPedidosPorProdutos(produtos));
 		
-		Assertions.assertThat(exception).isInstanceOf(Exception.class).hasMessage("Nenhum fornecedor encontrado para a quantidade solicitada do produto LEITE CONDENSADO MOÇA");
+		Assertions.assertThat(exception).isInstanceOf(Exception.class).hasMessage("Nenhum fornecedor encontrado para a quantidade solicitada do produto LEITE CONDENSADO MOCA");
 		
 		
 	}
