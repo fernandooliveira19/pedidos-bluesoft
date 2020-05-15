@@ -1,6 +1,5 @@
 package br.com.bluesoft.desafio.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +32,8 @@ public class PedidoController {
     @GetMapping
     public Iterable<PedidoDTO> findAll() {
     	
-    	List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
+    	return pedidoService.buscarPedidos();
     	
-    	listaPedidos = pedidoService.buscarPedidos();
-    	
-    	
-        return listaPedidos;
     }
     
       

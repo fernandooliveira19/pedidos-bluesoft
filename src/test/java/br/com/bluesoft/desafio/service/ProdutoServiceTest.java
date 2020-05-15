@@ -143,7 +143,7 @@ public class ProdutoServiceTest {
 	}
 	
 	@Test
-	public void deveRetornarMensagemQuantidadeSolicitada() {
+	public void deveRetornarMensagemErroQuantidadeSolicitada() {
 		
 		List<ProdutoDTO> produtos = new ArrayList<ProdutoDTO>();
 		ProdutoDTO produto = ProdutoDTO.builder()

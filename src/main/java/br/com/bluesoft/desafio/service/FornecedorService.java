@@ -28,9 +28,7 @@ public class FornecedorService {
 		
 		String uri = builderUriApiFornecedor(gtin);
 		
-		List<FornecedorDTO> result = restService.acessarApiRest(uri);
-		
-		return result;
+		return restService.acessarApiRest(uri);
 		
 	}
 	

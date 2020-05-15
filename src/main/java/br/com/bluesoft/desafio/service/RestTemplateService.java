@@ -25,7 +25,6 @@ public class RestTemplateService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		headers.setAcceptCharset(Collections.singletonList(Charset.forName("UTF-8")));
-//		
 		
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		ResponseEntity<List<FornecedorDTO>> result = restTemplate.exchange(uri,HttpMethod.GET, entity,new ParameterizedTypeReference<List<FornecedorDTO>>() {

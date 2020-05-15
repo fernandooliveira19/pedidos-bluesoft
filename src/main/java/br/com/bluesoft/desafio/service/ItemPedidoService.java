@@ -22,12 +22,12 @@ public class ItemPedidoService {
 	@Autowired
 	private ProdutoService produtoService;
 
-	public List<ItemPedido> salvarItensPedidos(Pedido pedido, ResultPedidoDTO dto) {
+	public List<ItemPedido> salvarItensPedidos(Pedido pedido, ResultPedidoDTO dto) throws Exception {
 		
 		List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
 		for(ResultProdutoDTO item : dto.getListaProdutos()) {
 	
-			ItemPedido itemPedido = criarItemPedido(pedido, item);
+			ItemPedido itemPedido = buildItemPedido(pedido, item);
 			
 			itemPedidoRepository.save(itemPedido);
 			itensPedido.add(itemPedido);
@@ -37,7 +37,7 @@ public class ItemPedidoService {
 		return itensPedido;
 	}
 
-	public ItemPedido criarItemPedido(Pedido pedido, ResultProdutoDTO item) {
+	public ItemPedido buildItemPedido(Pedido pedido, ResultProdutoDTO item) throws Exception {
 		Produto produto = produtoService.buscarProdutoPorGtin(item.getProduto().getGtin());
 		ItemPedido itemPedido = ItemPedido.builder()
 								.pedido(pedido)

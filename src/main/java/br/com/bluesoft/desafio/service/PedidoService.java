@@ -1,7 +1,6 @@
 package br.com.bluesoft.desafio.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import br.com.bluesoft.desafio.dto.ResultPedidoDTO;
 import br.com.bluesoft.desafio.model.Fornecedor;
 import br.com.bluesoft.desafio.model.ItemPedido;
 import br.com.bluesoft.desafio.model.Pedido;
-import br.com.bluesoft.desafio.model.Produto;
 import br.com.bluesoft.desafio.repository.PedidoRepository;
 
 @Service
@@ -33,7 +31,7 @@ public class PedidoService {
 	private ItemPedidoService itemPedidoService;
 
 	@Transactional(propagation = Propagation.REQUIRED)
-	public List<Pedido> salvarPedidos(List<ResultPedidoDTO> pedidosDTO) {
+	public List<Pedido> salvarPedidos(List<ResultPedidoDTO> pedidosDTO) throws Exception {
 
 		List<Pedido> pedidosCriados = new ArrayList<Pedido>();
 		
@@ -56,18 +54,15 @@ public class PedidoService {
 	public Pedido salvarPedido(ResultPedidoDTO dto) {
 
 		Pedido pedido = converterParaObjeto(dto);
-		Pedido pedidoSalvo = pedidoRepository.save(pedido);
-
-		return pedidoSalvo;
+		
+		return pedidoRepository.save(pedido);
 	}
 
 	private Pedido converterParaObjeto(ResultPedidoDTO dto) {
 
 		Fornecedor fornecedor = fornecedorService.buscarFornecedor(dto);
 
-		Pedido pedido = Pedido.builder().fornecedor(fornecedor).build();
-
-		return pedido;
+		return Pedido.builder().fornecedor(fornecedor).build();
 
 	}
 
@@ -93,22 +88,44 @@ public class PedidoService {
 		List<ItemPedidoDTO> itensPedidoDTO = new ArrayList<ItemPedidoDTO>();
 		for (ItemPedido itemPedido : pedido.getItens()) {
 
-			ProdutoDTO produtoDTO = ProdutoDTO.builder().gtin(itemPedido.getProduto().getGtin())
-					.nome(itemPedido.getProduto().getNome()).build();
+			ProdutoDTO produtoDTO = buildProdutoDTO(itemPedido);
 
-			ItemPedidoDTO itemPedidoDTO = ItemPedidoDTO.builder().preco(itemPedido.getPreco())
-					.quantidade(itemPedido.getQuantidade()).total(itemPedido.getTotal()).produto(produtoDTO).build();
+			ItemPedidoDTO itemPedidoDTO = buildItemPedidoDTO(itemPedido, produtoDTO);
 
 			itensPedidoDTO.add(itemPedidoDTO);
 		}
 
-		FornecedorDTO fornecedorDTO = FornecedorDTO.builder().cnpj(pedido.getFornecedor().getCnpj())
-				.nome(pedido.getFornecedor().getNome()).build();
+		FornecedorDTO fornecedorDTO = buildFornecedorDTO(pedido);
 
+		return buildPedidoDTO(pedido, itensPedidoDTO, fornecedorDTO);
+	}
+
+
+	private ProdutoDTO buildProdutoDTO(ItemPedido itemPedido) {
+		ProdutoDTO produtoDTO = ProdutoDTO.builder().gtin(itemPedido.getProduto().getGtin())
+				.nome(itemPedido.getProduto().getNome()).build();
+		return produtoDTO;
+	}
+
+
+	private ItemPedidoDTO buildItemPedidoDTO(ItemPedido itemPedido, ProdutoDTO produtoDTO) {
+		ItemPedidoDTO itemPedidoDTO = ItemPedidoDTO.builder().preco(itemPedido.getPreco())
+				.quantidade(itemPedido.getQuantidade()).total(itemPedido.getTotal()).produto(produtoDTO).build();
+		return itemPedidoDTO;
+	}
+
+
+	private PedidoDTO buildPedidoDTO(Pedido pedido, List<ItemPedidoDTO> itensPedidoDTO, FornecedorDTO fornecedorDTO) {
 		PedidoDTO pedidoDTO = PedidoDTO.builder().fornecedor(fornecedorDTO).id(pedido.getId())
 				.itens(itensPedidoDTO).build();
-
 		return pedidoDTO;
+	}
+
+
+	private FornecedorDTO buildFornecedorDTO(Pedido pedido) {
+		FornecedorDTO fornecedorDTO = FornecedorDTO.builder().cnpj(pedido.getFornecedor().getCnpj())
+				.nome(pedido.getFornecedor().getNome()).build();
+		return fornecedorDTO;
 	}
 
 }

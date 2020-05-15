@@ -19,7 +19,6 @@ import br.com.bluesoft.desafio.dto.PrecoDTO;
 import br.com.bluesoft.desafio.dto.ProdutoDTO;
 import br.com.bluesoft.desafio.dto.ResultPedidoDTO;
 import br.com.bluesoft.desafio.dto.ResultProdutoDTO;
-import br.com.bluesoft.desafio.exception.FornecedorProdutoNotFoundException;
 import br.com.bluesoft.desafio.model.Pedido;
 import br.com.bluesoft.desafio.model.Produto;
 import br.com.bluesoft.desafio.repository.ProdutoRepository;
@@ -41,12 +40,12 @@ public class ProdutoService {
 		return produtoRepository.findAll();
 	}
 	
-	public Produto buscarProdutoPorGtin(String gtin) {
+	public Produto buscarProdutoPorGtin(String gtin) throws Exception {
 		
 		Optional<Produto> result = produtoRepository.findById(gtin);
 		
-		if(result.isPresent()) {
-			
+		if(!result.isPresent()) {
+			throw new Exception("Nenhum produto encontrado para o codigo " + gtin);
 		}
 		
 		return result.get();
@@ -88,13 +87,21 @@ public class ProdutoService {
 
 		FornecedorProdutoDTO fornecedorComMenorPrecoProduto = buscarFornecedorComMenorPrecoProduto(fornecedoresProduto, produto.getQuantidade());
 		
+		buildFornecedorProdutoComMenorPreco(produto, fornecedorComMenorPrecoProduto);
+		
+		return fornecedorComMenorPrecoProduto;
+	}
+
+	private void buildFornecedorProdutoComMenorPreco(ProdutoDTO produto,
+			FornecedorProdutoDTO fornecedorComMenorPrecoProduto) {
+		
 		fornecedorComMenorPrecoProduto.setQuantidade(produto.getQuantidade());
 		fornecedorComMenorPrecoProduto.setGtin(produto.getGtin());
 		fornecedorComMenorPrecoProduto.setCnpj(fornecedorComMenorPrecoProduto.getCnpj());
 		fornecedorComMenorPrecoProduto.setProduto(produto);
-		
-		return fornecedorComMenorPrecoProduto;
 	}
+	
+	
 	
 	private boolean validarValoresMinimos(List<FornecedorDTO> fornecedoresProduto, ProdutoDTO produto) throws Exception {
 		List<PrecoDTO> precos = new ArrayList<PrecoDTO>();
@@ -114,12 +121,6 @@ public class ProdutoService {
 		
 		throw new Exception("Nenhum fornecedor encontrado para a quantidade solicitada do produto " + prod.getNome());
 		
-	}
-
-	public void atribuirNomeProduto(FornecedorProdutoDTO fornecedorComMenorPrecoProduto, String gtin) {
-		Optional<Produto> result = produtoRepository.findById(gtin);
-		
-		fornecedorComMenorPrecoProduto.setNomeProduto(result.get().getNome());
 	}
 
 	public FornecedorProdutoDTO buscarFornecedorComMenorPrecoProduto(List<FornecedorDTO> fornecedoresProduto, Integer quantidade) {
@@ -184,7 +185,6 @@ public class ProdutoService {
 				;
 		
 		
-		
 		FornecedorDTO dto = new FornecedorDTO();
 		
 		for (Entry<String, List<FornecedorProdutoDTO>> pair : collect.entrySet()) {
@@ -200,7 +200,6 @@ public class ProdutoService {
 		    dto.setPrecos(precos);    
 		    
 		}
-		
 		
 		return dto;
 	}

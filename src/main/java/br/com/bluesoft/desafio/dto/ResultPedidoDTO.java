@@ -16,9 +16,5 @@ public class ResultPedidoDTO {
 	private String nomeFornecedor;
 	private String cnpj;
 	private List<ResultProdutoDTO> listaProdutos;
-//	private List<PrecoDTO> precos;
-	
-	
-
 
 }
